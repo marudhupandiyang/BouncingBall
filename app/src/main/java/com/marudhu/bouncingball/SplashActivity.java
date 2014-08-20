@@ -1,39 +1,40 @@
 package com.marudhu.bouncingball;
 
-import android.graphics.Point;
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
 
-public class BounceActivity extends ActionBarActivity {
+public class SplashActivity extends ActionBarActivity {
 
-    CanvasView canvasView ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActionBar().hide();
+        setContentView(R.layout.activity_splash);
 
-        if (savedInstanceState == null || canvasView == null) {
-            Point size = new Point();
-            getWindowManager().getDefaultDisplay().getSize(size);
-            canvasView = new CanvasView(BounceActivity.this,size.x,size.y);
-        }
-        setContentView(canvasView);
+        TimerTask hideSplash = new TimerTask() {
+            @Override
+            public void run() {
+                startActivity(new Intent(SplashActivity.this,BounceActivity.class));
+                finish();
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(hideSplash,2000);
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//
-//        canvasView.saveState();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.bounce, menu);
+        getMenuInflater().inflate(R.menu.splash, menu);
         return true;
     }
 
@@ -43,12 +44,9 @@ public class BounceActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_Restart) {
-            canvasView.restart();
+        if (id == R.id.action_settings) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }
